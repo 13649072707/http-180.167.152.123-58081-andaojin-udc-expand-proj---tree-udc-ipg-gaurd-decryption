@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+    <PackageReference Include="Furion" Version="2.20.7" />
+    <PackageReference Include="Furion.Extras.Logging.Serilog" Version="4.8.4.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.17" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="NodaTime" Version="3.1.6" />
+  </ItemGroup>
+
+
+	<ItemGroup>
+	  <ProjectReference Include="..\EDoc2.Entity\EDoc2.Entity.csproj" />
+	  <ProjectReference Include="..\EDoc2.Ext.Dto\EDoc2.Ext.Dto.csproj" />
+	</ItemGroup>
+
+</Project>

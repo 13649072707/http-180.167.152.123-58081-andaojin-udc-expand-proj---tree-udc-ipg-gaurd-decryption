@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>0f569867-a252-4fe2-b2a0-988ef2f81be1</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EDoc2.Ext.Dto\EDoc2.Ext.Dto.csproj" />
+    <ProjectReference Include="..\Nacos.Microsoft.Extensions.Configuration\Nacos.Microsoft.Extensions.Configuration.csproj" />
+    <ProjectReference Include="..\Nacos\Nacos.csproj" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,23 @@
+{
+  "DetailedErrors": true,
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Warning",
+      "Override": {
+        "System": "Warning",
+        "Microsoft": "Error",
+        "System.Net.Http.HttpClient.NacosClient.ClientHandler": "Warning",
+        "EDoc2.Core.WeChatOrgSyncServices": "Debug",
+        "Microsoft.Hosting.Lifetime": "Warning",
+        "Microsoft.EntityFrameworkCore": "Warning",
+        "Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker": "Debug",
+        "DingdingApp.Controllers.AuthController": "Debug",
+        "SqlSugar": "Warning",
+        "CasAuthApp.CasAuthController": "Debug",
+        "AspNetCore.Security.CAS.CasHandler": "Debug",
+        "EDoc2.Core.Ipg.IpgDecryptService": "Debug"
+      }
+    }
+  }
+
+}

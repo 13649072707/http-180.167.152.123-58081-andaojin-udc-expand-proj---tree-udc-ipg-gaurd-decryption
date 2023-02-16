@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <PackageId>nacos-sdk-csharp.AspNetCore</PackageId>
+    <VersionPrefix>1.3.3</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Authors>nacos-sdk-csharp Contributors</Authors>
+    <Description>nacos csharp sdk</Description>
+    <PackageTags>nacos,csharp,sdk</PackageTags>
+    <PackageProjectUrl>https://github.com/nacos-group/nacos-sdk-csharp</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/nacos-group/nacos-sdk-csharp</RepositoryUrl>
+    <ProjectUrl>https://github.com/nacos-group/nacos-sdk-csharp</ProjectUrl>
+    <!--<PackageLicenseFile>LICENSE</PackageLicenseFile>-->
+    <PackageReleaseNotes>      
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+	  <Version>1.3.3-edoc2-202206011800</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nacos\Nacos.csproj" />
+  </ItemGroup>
+
+  <!--<ItemGroup>
+    <None Include="../../LICENSE" Pack="true" Visible="false" PackagePath="" />
+  </ItemGroup>-->
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.1.0" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+</Project>

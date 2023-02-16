@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Ipgaurd文件下载解密</title>
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/layui.css" rel="stylesheet" />
+    <script src="./js/global.js"></script>
+    <style>
+        .layui-panel {
+            padding: 10px
+        }
+    </style>
+</head>
+
+<body class="pear-container">
+    <form class="layui-form" style="padding: 30px;" lay-filter="orgsync" action="./IpgaurdDecryption/DownloadAndDecrypt" method="post">
+
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-label-width-30">ECM集成登录密钥：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="IntegrationKey" id="IntegrationKey" lay-filter="IntegrationKey" autocomplete="off"
+                       placeholder="请输入ECM集成登录密钥" lay-verify="required" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">ECM集成登录密钥是从ecm登录认证中获取。</div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-label-width-30">文件下载方式：</label>
+            <div class="layui-input-inline">
+                <select name="FileDownloadType" id="FileDownloadType" lay-filter="FileDownloadType">
+                    <option value="5100">普通文件下载</option>
+                    <!--<option value="5110">外发文件下载</option>-->
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux" style="color:#1890ff !important">外发文件下载需填写code及密码,以及确认好剩余下载次数及时间</div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-label-width-30">文件Id：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="FileId" lay-filter="FileId" id="FileId" lay-verify="number" oninput="if(this.value=='00'){this.value='0';}else{this.value=this.value.replace(/[^0-9]/g,'')}" autocomplete="off" placeholder="请填入文件Id 例：134" class="layui-input">
+
+            </div>
+            <div class="layui-form-mid layui-word-aux">仅支持单文件,填入一个文件Id即可</div>
+        </div>
+
+        <!--<div class="layui-form-item">
+            <label class="layui-form-label layui-label-width-30">文件名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="ZipName" lay-filter="ZipName" id="ZipName" autocomplete="off" lay-verify="required" placeholder="请填入文件名称"
+                       class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">请填入文件的完整名称,以及文件后缀 例:test.doc</div>
+        </div>-->
+
+        <div class="layui-form-item putong" style="display: none">
+            <label class="layui-form-label layui-label-width-30">外发密码：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="WFpwd" lay-filter="WFpwd" autocomplete="off"
+                       placeholder="请输入外发密码" class="layui-input" id="WFpwd">
+            </div>
+            <div class="layui-form-mid layui-word-aux" style="color:#1890ff !important">
+                外发文件后会生成外发密码,该密码请求接口是用来生成codekey
+            </div>
+        </div>
+
+        <div class="layui-form-item putong" style="display: none">
+            <label class="layui-form-label layui-label-width-30">code：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="WFcode" lay-filter="WFcode" autocomplete="off"
+                       placeholder="请输入外发链接里面的code" class="layui-input" id="WFcode">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                该code用户文件验证
+            </div>
+        </div>
+        <!--返回的jobkey-->
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-label-width-30"></label>
+            <div class="layui-form-mid layui-word-aux">
+                <label id="JobKeyStr"></label>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-label-width-30"></label>
+            <button type="submit" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="jobRun"
+                    id="jobRunAction" style="border: 1px solid #1890ff; background-color: white; color: #1890ff ">
+                下载解密
+            </button>
+        </div>
+    </form>
+    <script src="./component/layui/layui.js"></script>
+    <script type="text/javascript">
+        layui.config({
+            base: './component/layui/exts/'
+        }).extend({
+            test: 'selectPlus',
+            test1: 'dragarrange',
+            test2: 'postman',
+            cron: "cron/cron"
+        }).use(['form', 'layedit', 'laydate', 'element', 'selectPlus', 'util', 'dragarrange', 'postman', 'cron'], function () {
+            var form = layui.form
+                , layer = layui.layer
+                , $ = layui.jquery;
+
+
+            // 下拉事件
+            form.on('select(FileDownloadType)', function (data) {
+                var FileDownloadType = $("select[name=FileDownloadType").val();
+                if (FileDownloadType == "5100") {
+                    $(".putong").hide();
+                } else {
+                    $(".putong").show();
+                }
+            })
+
+            //监听 下载按钮
+            form.on('submit(jobRun)', function (data) {
+
+
+                //var fileIds = $("#FileId").val();
+                //var ZipName = $("#ZipName").val();
+                //var IntegrationKey = $("#IntegrationKey").val();
+                //var FileDownloadType = $("select[name=FileDownloadType").val();
+                //var wfcode = $("#WFcode").val();
+                //var wfpwd = $("#WFpwd").val();
+                //var codekey = "";
+                //if (FileDownloadType == "5110") {
+                //    if (wfpwd == null || wfpwd == undefined || wfpwd == "") {
+                //        return layer.msg("文件密码不正确");
+                //    }
+                //    if (wfcode == null || wfcode == undefined || wfcode == "") {
+                //        return layer.msg("文件code不正确");
+                //    }
+                //}
+                ////var url = "./auth/DownloadAndDecrypt";
+                ////let $container = $(`<div style="display:none;"></div>`);
+                ////let $form = $('<form action="' + url + '" method="post"></form>');
+                ////$form.appendTo($container);
+                ////$form.append(`<input type="hidden" name = "IntegrationKey" value="${IntegrationKey}">`);
+                ////$form.append(`<input type="hidden" name = "FileIds" value="${fileIds}">`);
+                ////$form.append(`<input type="hidden" name = "FolderId" value="">`);
+                ////$("#_ext_DocToFile").append($container);
+                ////$form.submit();
+                ////$form.remove();
+                //var docDto =
+                //{
+                //    fileIds: fileIds,
+                //    folderIds: "",
+                //    code: wfcode,
+                //    codekey: codekey,
+                //    token: "",
+                //    zipName: ZipName,
+                //    integrationKey: IntegrationKey
+                //};
+                //var url = "./IpgaurdDecryption/DownloadAndDecrypt";
+                //// 外发文件切换接口
+                //if (FileDownloadType == "5110") {
+                //    /*url = "./auth/downloadecmdocentitybyyst";*/
+                //    layer.msg("暂不支持", { icon: 5, offset: 't' });
+                //}
+                //var msg = layer.msg('努力中加载中...', { icon: 16, shade: [0.5, '#f5f5f5'], scrollbar: false, offset: '0px', time: 0 });
+                //$.ajax({
+                //    url: url,
+                //    type: 'Post',
+                //    dataType: "json",
+                //    data: docDto
+                //}).then(function (res) {
+                //    debugger;
+                //    layer.close(msg);
+                //    console.log(res);
+                //    if (res.status == "0") {
+                //        // TODO 进度条显示
+                //        //viewFun.checkDocdownLoadStatus(res.exceptKey, ZipName);
+                //        layer.msg(res.message, { icon: 1, offset: 't' });
+                //    } else {
+                //        layer.msg(res.message, { icon: 5, offset: 't' });
+                //    }
+                //});
+            });
+
+            //检查文件下载状态
+            function checkDocdownLoadStatus(jobKey) {
+                var res1 = {};
+                console.log("./auth/checkdocdownloadstatus?jobKey=" + jobKey,);
+                $.ajax({
+                    type: "GET",
+                    url: "./auth/checkdocdownloadstatus?jobKey=" + jobKey,
+                    async: false,
+                    contentType: 'application/json',
+                    dataType: "json",
+                    success: function (res) {
+                        res1 = res;
+                        layer.msg("状态" + res.status, { icon: 1, offset: 't' });
+                    }
+                });
+                return res1;
+            }
+            // 查询状态
+            viewFun = {
+                checkDocdownLoadStatus: function (exceptKey, fileName) {
+                    var res = checkDocdownLoadStatus(exceptKey);
+                    console.log(res.status);
+                    switch (res.status) {
+                        case 'Progress':
+                        case 'start':
+                        case 'begin':
+                        case 'success':
+                            setTimeout(() => {
+                                viewFun.checkDocdownLoadStatus(exceptKey, fileName)
+                            }, 2000);
+                            break;
+                        case 'Complete':
+                            //这里直接下载 返回下载链接
+                            var formUrl = "/docking/webstaticfiles/ecmdoc/" + exceptKey + "/" + fileName;
+                            console.log(formUrl);
+                            window.open(formUrl, "_blank");
+                            break;
+                        case 'error':
+                            alert('失败');
+                            break;
+                        case 'ErrorDecrypt':
+                            alert('解密失败');
+                            break;
+                    }
+                }
+            }
+            // TODO
+
+
+        });
+    </script>
+</body>
+
+</html>

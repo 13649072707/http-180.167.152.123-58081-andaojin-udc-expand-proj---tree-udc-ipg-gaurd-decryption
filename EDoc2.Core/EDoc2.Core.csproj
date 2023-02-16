@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Furion.Extras.ObjectMapper.Mapster" Version="2.20.7" />
+	  <PackageReference Include="NEST" Version="7.17.4" />
+	  <PackageReference Include="Polly" Version="7.2.3" />
+	  <PackageReference Include="Quartz" Version="3.4.0" />
+	  <PackageReference Include="ServiceStack.Text.Core" Version="6.5.0" />
+	  <PackageReference Include="SharpZipLib" Version="1.4.1" />
+	  <PackageReference Include="System.ServiceModel.Duplex" Version="4.8.1" />
+	  <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
+	  <PackageReference Include="System.ServiceModel.NetTcp" Version="4.8.1" />
+	  <PackageReference Include="System.ServiceModel.Security" Version="4.8.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <ProjectReference Include="..\EDoc2.Api\EDoc2.Api.csproj" />
+    <ProjectReference Include="..\EDoc2.Data\EDoc2.Data.csproj" />
+    <ProjectReference Include="..\EDoc2.Entity\EDoc2.Entity.csproj" />
+    <ProjectReference Include="..\EDoc2.Extensions\EDoc2.Extensions.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+	  <WCFMetadata Include="Connected Services" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="QuartzWorks\" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,31 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://*:37609",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DatabaseServerName": "https://10.0.19.39",
+        "DatabaseServerPort": "30001"
+      }
+    },
+    "YstDecryption": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DatabaseServerName": "https://10.0.19.39",
+        "DatabaseServerPort": "30001",
+        "TESTORGSYNCURL": "https://10.0.19.39",
+        "EcmFileUrl": "https://10.0.19.39",
+        "IsOffDecrypt1": "0" 
+      }
+    }
+  }
+}
